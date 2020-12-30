@@ -1,4 +1,4 @@
-From centos:centos7
+FROM centos:centos7
 RUN yum install -y wget java mysql python3 python3-devel pip3 mysql-devel gcc && \
     yum clean all && rm -rf /var/cache/yum/*&& \
     pip3 install mysqlclient==1.3.12 -i http://pypi.douban.com/simple --trusted-host pypi.douban.com && \
@@ -8,7 +8,7 @@ RUN yum install -y wget java mysql python3 python3-devel pip3 mysql-devel gcc &&
 
 COPY docker_init_start.sh /opt/dble/bin/
 COPY wait-for-it.sh /opt/dble/bin/
-COPY *.cnf /opt/dble/conf/
+# COPY *.cnf /opt/dble/conf/
 
 ARG DBLE_VERSION="latest"
 
