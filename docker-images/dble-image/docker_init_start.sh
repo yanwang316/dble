@@ -24,12 +24,14 @@ fi
 
 cp -n /opt/dble/extend.conf.d/* /opt/dble/conf/
 
+# replace bootstrap.cnf with env var
+sed -i "" "s#^-DinstanceName=.*#-DinstanceName=$DBLE_NAME#g"
+sed -i "" "s#^-DinstanceId=.*#-DinstanceId=$DBLE_INDEX#g"
+
 sh /opt/dble/bin/dble start
 sh /opt/dble/bin/wait-for-it.sh 127.0.0.1:8066
 
-if [ -x "/opt/dble/conf/dble_init.sh" ]; then
-  sh /opt/dble/conf/dble_init.sh
-fi
+
 
 echo "dble init finish"
 
