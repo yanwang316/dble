@@ -24,12 +24,22 @@ fi
 
 cp -n /opt/dble/extend.conf.d/* /opt/dble/conf/
 
-# replace bootstrap.cnf with env var
-sed -i "" "s#^-DinstanceName=.*#-DinstanceName=$DBLE_NAME#g"
-sed -i "" "s#^-DinstanceId=.*#-DinstanceId=$DBLE_INDEX#g"
+# kubernetes HOSTNAME
+if [ -n "$HOSTNAME" ]; then
+    hostStrArray=(`echo $HOSTNAME | tr '-' ' '`)
+    DBLE_NAME="${hostStrArray[0]}${hostStrArray[1]}"
+    DBLE_INDEX="${hostStrArray[1]}"
+    echo $DBLE_NAME
+    echo $DBLE_INDEX
+    sed -i "s#^-DinstanceName=.*#-DinstanceName=$DBLE_NAME#g" /opt/dble/conf/bootstrap.cnf
+    sed -i "s#^-DinstanceId=.*#-DinstanceId=$DBLE_INDEX#g" /opt/dble/conf/bootstrap.cnf
 
-sh /opt/dble/bin/dble start
-sh /opt/dble/bin/wait-for-it.sh 127.0.0.1:8066
+fi
+
+# replace bootstrap.cnf with env var
+
+/bin/sh /opt/dble/bin/dble start
+/bin/sh /opt/dble/bin/wait-for-it.sh 127.0.0.1:8066
 
 
 
