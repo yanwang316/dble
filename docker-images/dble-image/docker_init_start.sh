@@ -22,18 +22,22 @@ if [ -n "$MASTERS" ] && [ -n "$SLAVES" ] &&  [ -n "$MYSQL_REPLICATION_USER" ] &&
       done
 fi
 
-cp -n /opt/dble/extend.conf.d/* /opt/dble/conf/
+if [ -d "/opt/dble/extend.conf.d" ]; then
+    echo 'copy /opt/dble/extend.conf.d files'
+    cp -n /opt/dble/extend.conf.d/* /opt/dble/conf/
+fi
 
 # kubernetes HOSTNAME
 if [ -n "$HOSTNAME" ]; then
     hostStrArray=(`echo $HOSTNAME | tr '-' ' '`)
-    DBLE_NAME="${hostStrArray[0]}${hostStrArray[1]}"
-    DBLE_INDEX="${hostStrArray[1]}"
-    echo $DBLE_NAME
-    echo $DBLE_INDEX
-    sed -i "s#^-DinstanceName=.*#-DinstanceName=$DBLE_NAME#g" /opt/dble/conf/bootstrap.cnf
-    sed -i "s#^-DinstanceId=.*#-DinstanceId=$DBLE_INDEX#g" /opt/dble/conf/bootstrap.cnf
+    sed -i "s#^-DinstanceName=.*#-DinstanceName=${hostStrArray[0]}${hostStrArray[1]}#g" /opt/dble/conf/bootstrap.cnf
+    sed -i "s#^-DinstanceId=.*#-DinstanceId=1${hostStrArray[1]}#g" /opt/dble/conf/bootstrap.cnf
 
+fi
+
+# copy zk ips
+if [ -n "$ZK_CLUSTER" ]; then
+    sed -i "s#^clusterIP=.*#clusterIP=$ZK_CLUSTER#g" /opt/dble/conf/cluster.cnf
 fi
 
 # replace bootstrap.cnf with env var
