@@ -24,7 +24,7 @@ fi
 
 if [ -d "/opt/dble/extend.conf.d" ]; then
     echo 'copy /opt/dble/extend.conf.d files'
-    cp -n /opt/dble/extend.conf.d/conf/* /opt/dble/conf/
+    cp -n /opt/dble/extend.conf.d/* /opt/dble/conf/
 fi
 
 # kubernetes HOSTNAME
