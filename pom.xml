@@ -314,9 +314,9 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>*.dtd</include>
-                </includes>
+<!--                <includes>-->
+<!--                    <include>*.dtd</include>-->
+<!--                </includes>-->
             </resource>
             <resource>
                 <directory>${basedir}</directory>

@@ -30,8 +30,14 @@ fi
 # kubernetes HOSTNAME
 if [ -n "$HOSTNAME" ]; then
     hostStrArray=(`echo $HOSTNAME | tr '-' ' '`)
-    sed -i "s#^-DinstanceName=.*#-DinstanceName=${hostStrArray[0]}1${hostStrArray[1]}#g" /opt/dble/conf/bootstrap.cnf
-    sed -i "s#^-DinstanceId=.*#-DinstanceId=1${hostStrArray[1]}#g" /opt/dble/conf/bootstrap.cnf
+
+    if [ 'master' = ${hostStrArray[1]} ]; then
+        preId="1";
+    else
+        preId="2";
+    fi
+    sed -i "s#^-DinstanceName=.*#-DinstanceName=${hostStrArray[0]}_${hostStrArray[1]}_${hostStrArray[2]}#g" /opt/dble/conf/bootstrap.cnf
+    sed -i "s#^-DinstanceId=.*#-DinstanceId=${preId}${hostStrArray[2]}#g" /opt/dble/conf/bootstrap.cnf
 
 fi
 
